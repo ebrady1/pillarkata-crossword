@@ -62,4 +62,24 @@ class PuzzleDataFileTests
         assertTrue(success);
 
     }
+
+    @Test
+    void LoadPuzzleDataWithNonSquarePlayfield()
+    {
+        boolean success = false;
+        try
+        {
+            PuzzleDataSrc dataSrc = new PuzzleDataFile();
+            dataSrc.LoadPuzzleData("tests/InvalidPuzzleTest_NonSquarePlayfield.txt");
+            dataSrc.ValidatePuzzleData();
+        } catch (PuzzleDataPlayfieldException e)
+        {
+            success = true;
+        } catch (Exception e)
+        {
+            success = false;
+        }
+        assertTrue(success);
+    }
+
 }

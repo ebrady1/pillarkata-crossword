@@ -12,12 +12,13 @@ public class PuzzleDataFile implements PuzzleDataSrc
     private FileReader m_puzzleDataFileReader = null;
     private BufferedReader m_bufferedDataFileReader = null;
     private String m_wordsToFind[] = null;
-    private List<String[]> m_playField = new ArrayList<>();
+    private ArrayList<String[]> m_playField = new ArrayList<>();
 
     public PuzzleDataFile()
     {
 
     }
+
     public void LoadPuzzleData(String dataSrc) throws PuzzleDataException
     {
         m_dataSrc = dataSrc;
@@ -25,10 +26,9 @@ public class PuzzleDataFile implements PuzzleDataSrc
         {
             LoadPuzzleWordList();
             LoadPuzzlePlayField();
-        }
-        catch(NullPointerException | IOException ex)
+        } catch (NullPointerException | IOException ex)
         {
-            throw new PuzzleDataIOException(ex.getMessage(),ex.getCause());
+            throw new PuzzleDataIOException(ex.getMessage(), ex.getCause());
         }
     }
 
@@ -52,8 +52,6 @@ public class PuzzleDataFile implements PuzzleDataSrc
         FileReader puzzleDataFileReader = new FileReader(m_dataSrc);
         BufferedReader bufferedPuzzleDataFileReader = new BufferedReader(puzzleDataFileReader);
 
-        int row = 0;
-        int columns = 0;
         String puzzleWordsToFindLine = bufferedPuzzleDataFileReader.readLine();
         String puzzleMatrixRow = bufferedPuzzleDataFileReader.readLine();
         while (puzzleMatrixRow != null)
@@ -68,7 +66,7 @@ public class PuzzleDataFile implements PuzzleDataSrc
         boolean validList = false;
         if (m_wordsToFind.length > 0)
         {
-            for (String word:m_wordsToFind)
+            for (String word : m_wordsToFind)
             {
                 if (word.length() >= 2)
                 {
@@ -88,9 +86,53 @@ public class PuzzleDataFile implements PuzzleDataSrc
         }
     }
 
-    private void ValidatePuzzleDataPlayField() throws PuzzleDataException
+    private void ValidatePuzzleDataPlayField() throws PuzzleDataPlayfieldException
     {
-        throw new PuzzleDataException();
+        Integer maxWordSize = PuzzleDataMaxWordSize();
+        if (m_playField != null)
+        {
+            Integer rows = m_playField.size();
+            if (rows < maxWordSize)
+            {
+                throw new PuzzleDataPlayfieldException();
+            }
+            PuzzleDataPlayfieldRowValidate();
+        }
+    }
+
+    private Integer PuzzleDataMaxWordSize()
+    {
+        boolean validPlayfield = false;
+        Integer maxWordSize = 0;
+        for (String testWord : m_wordsToFind)
+        {
+            Integer testWordSize = testWord.length();
+            maxWordSize = (maxWordSize < testWordSize) ? testWordSize : maxWordSize;
+        }
+
+        return maxWordSize;
+
+    }
+
+    private void PuzzleDataPlayfieldRowValidate() throws PuzzleDataPlayfieldException
+    {
+        Integer rows = m_playField.size();
+        for (String[] rowChars : m_playField)
+        {
+            if (rowChars.length != rows)
+            {
+                throw new PuzzleDataPlayfieldException();
+            }
+
+            for (String colChar : rowChars)
+            {
+                if ((colChar.length() != 1) &&
+                        (!colChar.chars().allMatch(Character::isLetter)))
+                {
+                    throw new PuzzleDataPlayfieldException();
+                }
+            }
+        }
     }
 }
 
