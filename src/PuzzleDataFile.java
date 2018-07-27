@@ -3,6 +3,7 @@ import java.lang.reflect.Array;
 import java.util.AbstractCollection;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.IntStream;
 
 public class PuzzleDataFile implements PuzzleDataSrc
 {
@@ -17,7 +18,7 @@ public class PuzzleDataFile implements PuzzleDataSrc
     {
 
     }
-    public void LoadPuzzleData(String dataSrc) throws PuzzleDataIOException
+    public void LoadPuzzleData(String dataSrc) throws PuzzleDataException
     {
         m_dataSrc = dataSrc;
         try
@@ -29,6 +30,12 @@ public class PuzzleDataFile implements PuzzleDataSrc
         {
             throw new PuzzleDataIOException(ex.getMessage(),ex.getCause());
         }
+    }
+
+    public void ValidatePuzzleData() throws PuzzleDataException
+    {
+        ValidatePuzzleDataWordList();
+        ValidatePuzzleDataPlayField();
     }
 
     private void LoadPuzzleWordList() throws IOException
@@ -54,6 +61,36 @@ public class PuzzleDataFile implements PuzzleDataSrc
             m_playField.add(puzzleMatrixRow.split(","));
             puzzleMatrixRow = bufferedPuzzleDataFileReader.readLine();
         }
+    }
+
+    private void ValidatePuzzleDataWordList() throws PuzzleDataWordListException
+    {
+        boolean validList = false;
+        if (m_wordsToFind.length > 0)
+        {
+            for (String word:m_wordsToFind)
+            {
+                if (word.length() >= 2)
+                {
+                    IntStream wordChars = word.chars();
+                    validList = wordChars.allMatch(Character::isLetter);
+                }
+                if (!validList)
+                {
+                    break;
+                }
+            }
+        }
+
+        if (!validList)
+        {
+            throw new PuzzleDataWordListException();
+        }
+    }
+
+    private void ValidatePuzzleDataPlayField() throws PuzzleDataException
+    {
+        throw new PuzzleDataException();
     }
 }
 

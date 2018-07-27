@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class PuzzleDataFileTest
+class PuzzleDataFileTests
 {
     @Test
     void LoadPuzzleDataSrcTest()
@@ -18,6 +18,27 @@ class PuzzleDataFileTest
         {
             assertTrue(false);
         }
+
+    }
+
+    @Test
+    void LoadPuzzleDataWithInvalidWordInList()
+    {
+        boolean success = false;
+        try
+        {
+            PuzzleDataSrc dataSrc = new PuzzleDataFile();
+            dataSrc.LoadPuzzleData("tests/InvalidPuzzleTest_WordList.txt");
+            dataSrc.ValidatePuzzleData();
+        } catch (PuzzleDataWordListException e)
+        {
+            success = true;
+        } catch (Exception e)
+        {
+            success = false;
+        }
+
+        assertTrue(success);
 
     }
 }
