@@ -82,4 +82,23 @@ class PuzzleDataFileTests
         assertTrue(success);
     }
 
+    @Test
+    void LoadPuzzleDataWithSearchWordsLargerThanPlayField()
+    {
+        boolean success = false;
+        try
+        {
+            PuzzleDataSrc dataSrc = new PuzzleDataFile();
+            dataSrc.LoadPuzzleData("tests/InvalidPuzzleTest_WordLongerThanPlayField.txt");
+            dataSrc.ValidatePuzzleData();
+        } catch (PuzzleDataPlayfieldException e)
+        {
+            success = true;
+        } catch (Exception e)
+        {
+            success = false;
+        }
+        assertTrue(success);
+    }
+
 }
