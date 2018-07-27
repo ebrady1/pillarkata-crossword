@@ -26,7 +26,7 @@ public class PuzzleDataFile implements PuzzleDataSrc
             LoadPuzzleWordList();
             LoadPuzzlePlayField();
         }
-        catch(IOException ex)
+        catch(NullPointerException | IOException ex)
         {
             throw new PuzzleDataIOException(ex.getMessage(),ex.getCause());
         }

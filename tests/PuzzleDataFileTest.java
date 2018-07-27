@@ -41,4 +41,25 @@ class PuzzleDataFileTests
         assertTrue(success);
 
     }
+
+    @Test
+    void LoadPuzzleDataWithEmptyDataFile()
+    {
+        boolean success = false;
+        try
+        {
+            PuzzleDataSrc dataSrc = new PuzzleDataFile();
+            dataSrc.LoadPuzzleData("tests/InvalidPuzzleTest_EmptyDataFile.txt");
+            dataSrc.ValidatePuzzleData();
+        } catch (PuzzleDataIOException e)
+        {
+            success = true;
+        } catch (Exception e)
+        {
+            success = false;
+        }
+
+        assertTrue(success);
+
+    }
 }
